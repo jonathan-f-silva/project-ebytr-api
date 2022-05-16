@@ -1,5 +1,9 @@
 import express from 'express';
 
+// import server from './server';
+
+// server.startServer();
+
 const server = express();
 
 server.get('/', (_req, res) => {
