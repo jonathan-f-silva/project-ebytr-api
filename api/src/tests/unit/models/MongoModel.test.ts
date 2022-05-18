@@ -4,7 +4,9 @@ import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
 import chaiAsPromised from 'chai-as-promised';
 
-import { testModel, validID, validObject } from '../../mocks/TestMocks';
+import { layers } from '../../../app';
+
+const { model } = layers;
 
 use(sinonChai);
 use(chaiAsPromised);
@@ -14,86 +16,86 @@ describe('MongoModel', () => {
 
   describe('#create()', () => {
     it('gera erro caso a DB gere erro', async () => {
-      sinon.stub(testModel.dao, 'create').rejects();
-      expect(testModel.create(validObject)).eventually.be.rejected;
+      sinon.stub(model.dao, 'create').rejects();
+      expect(model.create({} as any)).eventually.be.rejected;
     });
 
     it('retorna o documento criado', async () => {
-      sinon.stub(testModel.dao, 'create').resolves(validObject);
-      const test = await testModel.create(validObject);
-      expect(test).to.be.deep.equal(validObject);
+      sinon.stub(model.dao, 'create').resolves({} as any);
+      const test = await model.create({} as any);
+      expect(test).to.be.deep.equal({});
     });
   });
 
   describe('#read()', () => {
     it('gera erro caso a DB gere erro', async () => {
-      sinon.stub(testModel.dao, 'find').rejects();
-      expect(testModel.read()).eventually.be.rejected;
+      sinon.stub(model.dao, 'find').rejects();
+      expect(model.read()).eventually.be.rejected;
     });
 
     it('retorna um array com todos os documentos', async () => {
-      sinon.stub(testModel.dao, 'find').resolves([]);
-      const test = await testModel.read();
+      sinon.stub(model.dao, 'find').resolves([]);
+      const test = await model.read();
       expect(test).to.be.deep.equal([]);
     });
   });
 
   describe('#readOne()', () => {
     it('gera erro caso a DB gere erro', async () => {
-      sinon.stub(testModel.dao, 'findOne').rejects();
-      expect(testModel.readOne(validID)).eventually.be.rejected;
+      sinon.stub(model.dao, 'findOne').rejects();
+      expect(model.readOne('1')).eventually.be.rejected;
     });
 
     it('retorna null caso a DB não tenha o documento', async () => {
-      sinon.stub(testModel.dao, 'findOne').resolves(null);
-      const test = await testModel.readOne(validID);
+      sinon.stub(model.dao, 'findOne').resolves(null);
+      const test = await model.readOne('1');
       expect(test).to.be.equal(null);
     });
 
     it('retorna o documento na DB', async () => {
-      sinon.stub(testModel.dao, 'findOne').resolves(validObject as any);
-      const test = await testModel.readOne(validID);
-      expect(test).to.be.deep.equal(validObject);
+      sinon.stub(model.dao, 'findOne').resolves({} as any);
+      const test = await model.readOne('1');
+      expect(test).to.be.deep.equal({});
     });
   });
 
   describe('#update()', () => {
     it('gera erro caso a DB gere erro', async () => {
-      sinon.stub(testModel.dao, 'findByIdAndUpdate').rejects();
-      expect(testModel.update(validID, validObject)).eventually.be.rejected;
+      sinon.stub(model.dao, 'findByIdAndUpdate').rejects();
+      expect(model.update('1', {} as any)).eventually.be.rejected;
     });
 
     it('retorna null caso a DB não tenha o documento', async () => {
-      sinon.stub(testModel.dao, 'findByIdAndUpdate').resolves(null);
-      const test = await testModel.update(validID, validObject);
+      sinon.stub(model.dao, 'findByIdAndUpdate').resolves(null);
+      const test = await model.update('1', {} as any);
       expect(test).to.be.equal(null);
     });
 
     it('retorna o documento atualizado da DB', async () => {
-      sinon.stub(testModel.dao, 'findByIdAndUpdate').resolves(validObject as any);
-      const test = await testModel.update(validID, validObject);
-      expect(test).to.be.deep.equal(validObject);
-      expect(testModel.dao.findByIdAndUpdate)
-        .to.have.been.calledWith(validID, validObject, { new: true });
+      sinon.stub(model.dao, 'findByIdAndUpdate').resolves({} as any);
+      const test = await model.update('1', {} as any);
+      expect(test).to.be.deep.equal({});
+      expect(model.dao.findByIdAndUpdate)
+        .to.have.been.calledWith('1', {} as any, { new: true });
     });
   });
 
   describe('#delete()', () => {
     it('gera erro caso a DB gere erro', async () => {
-      sinon.stub(testModel.dao, 'findByIdAndDelete').rejects();
-      expect(testModel.delete(validID)).eventually.be.rejected;
+      sinon.stub(model.dao, 'findByIdAndDelete').rejects();
+      expect(model.delete('1')).eventually.be.rejected;
     });
 
     it('retorna null caso a DB não tenha o documento', async () => {
-      sinon.stub(testModel.dao, 'findByIdAndDelete').resolves(null);
-      const test = await testModel.delete(validID);
+      sinon.stub(model.dao, 'findByIdAndDelete').resolves(null);
+      const test = await model.delete('1');
       expect(test).to.be.equal(null);
     });
 
     it('retorna o documento removido da DB', async () => {
-      sinon.stub(testModel.dao, 'findByIdAndDelete').resolves(validObject as any);
-      const test = await testModel.delete(validID);
-      expect(test).to.be.deep.equal(validObject);
+      sinon.stub(model.dao, 'findByIdAndDelete').resolves({} as any);
+      const test = await model.delete('1');
+      expect(test).to.be.deep.equal({});
     });
   });
 });
