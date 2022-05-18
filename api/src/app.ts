@@ -1,35 +1,24 @@
+import express from 'express';
+import 'express-async-errors';
 import cors from 'cors';
-import express, { Router } from 'express';
 
-import connectToDatabase from './db/connection';
+import makeTodoRouter from './factories/TodoFactory';
+import ErrorMiddleware from './utils/ErrorMiddleware';
 
-class App {
-  public app: express.Application;
+const { router, ...layers } = makeTodoRouter();
+const app = express();
 
-  constructor() {
-    this.app = express();
-    this.app.use(cors());
-    this.app.use(express.json());
-  }
+app.use(cors());
+app.use(express.json());
 
-  public startServer(): void {
-    connectToDatabase().then(() => {
-      this.app.listen(
-        8080,
-        () => console.log(
-          'Backend running on port 8080.',
-        ),
-      );
-    });
-  }
+app.use(router);
 
-  public addRouter(router: Router) {
-    this.app.use(router);
-  }
+app.use(ErrorMiddleware);
 
-  public getApp() {
-    return this.app;
-  }
-}
+app.use('/', (_req, res) => {
+  res.sendStatus(200);
+});
 
-export default App;
+export default app;
+
+export { layers };
