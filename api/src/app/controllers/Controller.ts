@@ -1,19 +1,19 @@
 import { ZodSchema } from 'zod';
 import IdSchema from '../interfaces/IdSchema';
-import GenericService from '../services/Service';
+import Service from '../services/Service';
 import ErrorMessage from '../../utils/ErrorMessage';
 import ValidationError from '../../utils/ValidationError';
 
 export default class Controller<T> {
   constructor(
-    protected service: GenericService<T>,
+    protected service: Service<T>,
     protected validator: ZodSchema<T>,
   ) { }
 
-  create = async (data: T): Promise<T> => {
-    const { success } = this.validator.safeParse(data);
-    if (!success) throw new ValidationError();
-    return this.service.create(data);
+  create = async (body: unknown): Promise<T> => {
+    const result = this.validator.safeParse(body);
+    if (!result.success) throw new ValidationError();
+    return this.service.create(result.data);
   };
 
   read = async (): Promise<T[]> => this.service.read();
