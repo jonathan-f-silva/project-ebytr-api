@@ -8,7 +8,7 @@
     "build": "tsc",
     "dev": "ts-node-dev .",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
-    "test": "mocha -r ts-node/register src/tests/**/*.test.ts",
+    "test": "mocha -r ts-node/register tests/**/*.test.ts",
     "test:coverage": "nyc --all yarn test"
   },
   "dependencies": {

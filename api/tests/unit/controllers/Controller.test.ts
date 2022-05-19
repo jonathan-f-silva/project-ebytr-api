@@ -1,91 +1,91 @@
 /* eslint-disable sonarjs/no-duplicate-string */
 import { expect } from 'chai';
 import sinon from 'sinon';
+import { layers } from '../../../src/app';
+import { validTodo, validID } from '../../mocks/TodoMocks';
 
-import { testController, testService, validObject } from '../../mocks/TestMocks';
-
-const validID = '62620d6c9162997790a96412';
+const { service, controller } = layers;
 
 describe('Controller', () => {
   beforeEach(sinon.restore);
 
   describe('#create()', () => {
     it('gera erro caso o service gere erro', async () => {
-      sinon.stub(testService, 'create').rejects();
+      sinon.stub(service, 'create').rejects();
       try {
-        await testController.create(validObject);
+        await controller.create(validTodo);
         expect('não gerou erro').to.be.false;
       } catch (error) { expect(error).to.be.an('Error'); }
     });
 
     it('retorna o documento criado', async () => {
-      sinon.stub(testService, 'create').resolves(validObject);
-      const test = await testController.create(validObject);
-      expect(test).to.be.deep.equal(validObject);
+      sinon.stub(service, 'create').resolves(validTodo);
+      const test = await controller.create(validTodo);
+      expect(test).to.be.deep.equal(validTodo);
     });
   });
 
   describe('#read()', () => {
     it('gera erro caso o service gere erro', async () => {
-      sinon.stub(testService, 'read').rejects();
+      sinon.stub(service, 'read').rejects();
       try {
-        await testController.read();
+        await controller.read();
         expect('não gerou erro').to.be.false;
       } catch (error) { expect(error).to.be.an('Error'); }
     });
 
     it('retorna um array com todos os documentos', async () => {
-      sinon.stub(testService, 'read').resolves([]);
-      const test = await testController.read();
+      sinon.stub(service, 'read').resolves([]);
+      const test = await controller.read();
       expect(test).to.be.deep.equal([]);
     });
   });
 
   describe('#readOne()', () => {
     it('gera erro caso o service gere erro', async () => {
-      sinon.stub(testService, 'readOne').rejects();
+      sinon.stub(service, 'readOne').rejects();
       try {
-        await testController.readOne(validID);
+        await controller.readOne(validID);
         expect('não gerou erro').to.be.false;
       } catch (error) { expect(error).to.be.an('Error'); }
     });
 
     it('retorna o documento na DB', async () => {
-      sinon.stub(testService, 'readOne').resolves(validObject as any);
-      const test = await testController.readOne(validID);
-      expect(test).to.be.deep.equal(validObject);
+      sinon.stub(service, 'readOne').resolves(validTodo as any);
+      const test = await controller.readOne(validID);
+      expect(test).to.be.deep.equal(validTodo);
     });
   });
 
   describe('#update()', () => {
     it('gera erro caso o service gere erro', async () => {
-      sinon.stub(testService, 'update').rejects();
+      sinon.stub(service, 'update').rejects();
       try {
-        await testController.update(validID, validObject);
+        await controller.update(validID, validTodo);
         expect('não gerou erro').to.be.false;
       } catch (error) { expect(error).to.be.an('Error'); }
     });
 
     it('retorna o documento atualizado da DB', async () => {
-      sinon.stub(testService, 'update').resolves(validObject as any);
-      const test = await testController.update(validID, validObject);
-      expect(test).to.be.deep.equal(validObject);
+      sinon.stub(service, 'update').resolves(validTodo as any);
+      const test = await controller.update(validID, validTodo);
+      expect(test).to.be.deep.equal(validTodo);
     });
   });
 
   describe('#delete()', () => {
     it('gera erro caso o service gere erro', async () => {
-      sinon.stub(testService, 'delete').rejects();
+      sinon.stub(service, 'delete').rejects();
       try {
-        await testController.delete(validID);
+        await controller.delete(validID);
         expect('não gerou erro').to.be.false;
       } catch (error) { expect(error).to.be.an('Error'); }
     });
 
     it('retorna o documento removido da DB', async () => {
-      sinon.stub(testService, 'delete').resolves(validObject as any);
-      const test = await testController.delete(validID);
-      expect(test).to.be.deep.equal(validObject);
+      sinon.stub(service, 'delete').resolves(validTodo as any);
+      const test = await controller.delete(validID);
+      expect(test).to.be.deep.equal(validTodo);
     });
   });
 });

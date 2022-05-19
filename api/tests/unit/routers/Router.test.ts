@@ -3,167 +3,167 @@
 import { expect, use, request } from 'chai';
 import chaiHttp from 'chai-http';
 import sinon from 'sinon';
+import app, { layers } from '../../../src/app';
+import { validID, validTodo } from '../../mocks/TodoMocks';
 
-import {
-  app, invalidID, validID, invalidObject, validObject, testModel,
-} from '../../mocks/TestMocks';
+const { model } = layers;
 
 use(chaiHttp);
 
 describe('Router', () => {
   beforeEach(sinon.restore);
 
-  describe('POST /test (#create)', () => {
+  describe('POST /todos (#create)', () => {
     it('retorna erro 500 caso DB gere erro', async () => {
-      sinon.stub(testModel.dao, 'create').rejects();
+      sinon.stub(model.dao, 'create').rejects();
 
       const result = await request(app)
-        .post('/test')
-        .send(validObject);
+        .post('/todos')
+        .send(validTodo);
 
       expect(result).to.have.status(500);
     });
 
     it('retorna erro 400 caso receba dados inválidos', async () => {
-      sinon.stub(testModel.dao, 'create').rejects();
+      sinon.stub(model.dao, 'create').rejects();
 
       const result = await request(app)
-        .post('/test')
-        .send(invalidObject);
+        .post('/todos')
+        .send({});
 
       expect(result).to.have.status(400);
     });
 
     it('retorna status 201 caso tenha sucesso', async () => {
-      sinon.stub(testModel.dao, 'create').resolves(validObject);
+      sinon.stub(model.dao, 'create').resolves(validTodo);
 
       const result = await request(app)
-        .post('/test')
-        .send(validObject);
+        .post('/todos')
+        .send(validTodo);
 
       expect(result).to.have.status(201);
-      expect(result.body).to.be.deep.equal(validObject);
+      expect(result.body).to.be.deep.equal(validTodo);
     });
   });
 
-  describe('GET /test (#read)', () => {
+  describe('GET /todos (#read)', () => {
     it('retorna erro 500 caso DB gere erro', async () => {
-      sinon.stub(testModel.dao, 'find').rejects();
+      sinon.stub(model.dao, 'find').rejects();
 
       const result = await request(app)
-        .get('/test');
+        .get('/todos');
 
       expect(result).to.have.status(500);
     });
 
     it('retorna status 200 caso tenha sucesso', async () => {
-      sinon.stub(testModel.dao, 'find').resolves([]);
+      sinon.stub(model.dao, 'find').resolves([]);
 
       const result = await request(app)
-        .get('/test');
+        .get('/todos');
 
       expect(result).to.have.status(200);
       expect(result.body).to.be.deep.equal([]);
     });
   });
 
-  describe('GET /test/:id (#readOne)', () => {
+  describe('GET /todos/:id (#readOne)', () => {
     it('retorna erro 500 caso DB gere erro', async () => {
-      sinon.stub(testModel.dao, 'findOne').rejects();
+      sinon.stub(model.dao, 'findOne').rejects();
 
       const result = await request(app)
-        .get(`/test/${validID}`);
+        .get(`/todos/${validID}`);
 
       expect(result).to.have.status(500);
     });
 
     it('retorna erro 400 caso receba id inválido', async () => {
-      sinon.stub(testModel.dao, 'findOne').rejects();
+      sinon.stub(model.dao, 'findOne').rejects();
 
       const result = await request(app)
-        .get(`/test/${invalidID}`);
+        .get('/todos/99999');
 
       expect(result).to.have.status(400);
     });
 
     it('retorna status 200 caso tenha sucesso', async () => {
-      sinon.stub(testModel.dao, 'findOne').resolves(validObject as any);
+      sinon.stub(model.dao, 'findOne').resolves(validTodo as any);
 
       const result = await request(app)
-        .get(`/test/${validID}`);
+        .get(`/todos/${validID}`);
 
       expect(result).to.have.status(200);
-      expect(result.body).to.be.deep.equal(validObject);
+      expect(result.body).to.be.deep.equal(validTodo);
     });
   });
 
-  describe('UPDATE /test/:id (#update)', () => {
+  describe('UPDATE /todos/:id (#update)', () => {
     it('retorna erro 500 caso DB gere erro', async () => {
-      sinon.stub(testModel.dao, 'findByIdAndUpdate').rejects();
+      sinon.stub(model.dao, 'findByIdAndUpdate').rejects();
 
       const result = await request(app)
-        .put(`/test/${validID}`)
-        .send(validObject);
+        .put(`/todos/${validID}`)
+        .send(validTodo);
 
       expect(result).to.have.status(500);
     });
 
     it('retorna erro 400 caso receba id inválido', async () => {
-      sinon.stub(testModel.dao, 'findByIdAndUpdate').rejects();
+      sinon.stub(model.dao, 'findByIdAndUpdate').rejects();
 
       const result = await request(app)
-        .put(`/test/${invalidID}`)
-        .send(validObject);
+        .put('/todos/99999')
+        .send(validTodo);
 
       expect(result).to.have.status(400);
     });
 
     it('retorna erro 400 caso receba dados inválidos', async () => {
-      sinon.stub(testModel.dao, 'findByIdAndUpdate').rejects();
+      sinon.stub(model.dao, 'findByIdAndUpdate').rejects();
 
       const result = await request(app)
-        .put(`/test/${validID}`)
-        .send(invalidObject);
+        .put(`/todos/${validID}`)
+        .send({});
 
       expect(result).to.have.status(400);
     });
 
     it('retorna status 200 caso tenha sucesso', async () => {
-      sinon.stub(testModel.dao, 'findByIdAndUpdate').resolves(validObject as any);
+      sinon.stub(model.dao, 'findByIdAndUpdate').resolves(validTodo as any);
 
       const result = await request(app)
-        .put(`/test/${validID}`)
-        .send(validObject);
+        .put(`/todos/${validID}`)
+        .send(validTodo);
 
       expect(result).to.have.status(200);
-      expect(result.body).to.be.deep.equal(validObject);
+      expect(result.body).to.be.deep.equal(validTodo);
     });
   });
 
-  describe('DELETE /test/:id (#delete)', () => {
+  describe('DELETE /todos/:id (#delete)', () => {
     it('retorna erro 500 caso DB gere erro', async () => {
-      sinon.stub(testModel.dao, 'findByIdAndDelete').rejects();
+      sinon.stub(model.dao, 'findByIdAndDelete').rejects();
 
       const result = await request(app)
-        .delete(`/test/${validID}`);
+        .delete(`/todos/${validID}`);
 
       expect(result).to.have.status(500);
     });
 
     it('retorna erro 400 caso receba id inválido', async () => {
-      sinon.stub(testModel.dao, 'findByIdAndDelete').rejects();
+      sinon.stub(model.dao, 'findByIdAndDelete').rejects();
 
       const result = await request(app)
-        .delete(`/test/${invalidID}`);
+        .delete('/todos/99999');
 
       expect(result).to.have.status(400);
     });
 
     it('retorna status 204 caso tenha sucesso', async () => {
-      sinon.stub(testModel.dao, 'findByIdAndDelete').resolves(validObject as any);
+      sinon.stub(model.dao, 'findByIdAndDelete').resolves(validTodo as any);
 
       const result = await request(app)
-        .delete(`/test/${validID}`);
+        .delete(`/todos/${validID}`);
 
       expect(result).to.have.status(204);
     });
