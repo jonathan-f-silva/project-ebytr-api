@@ -7,11 +7,11 @@ import ValidationError from '../../utils/ValidationError';
 export default class Controller<T> {
   constructor(
     protected service: Service<T>,
-    protected validator: ZodSchema<T>,
+    protected validators: { add: ZodSchema, edit: ZodSchema },
   ) { }
 
   create = async (body: unknown): Promise<T> => {
-    const result = this.validator.safeParse(body);
+    const result = this.validators.add.safeParse(body);
     if (!result.success) throw new ValidationError();
     return this.service.create(result.data);
   };
@@ -27,7 +27,7 @@ export default class Controller<T> {
   update = async (id: string, data: T): Promise<T | null> => {
     const { success: idOkay } = IdSchema.safeParse(id);
     if (!idOkay) throw new ValidationError(ErrorMessage.ID_ERROR);
-    const { success } = this.validator.safeParse(data);
+    const { success } = this.validators.edit.safeParse(data);
     if (!success) throw new ValidationError();
     return this.service.update(id, data);
   };

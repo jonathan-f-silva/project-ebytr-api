@@ -10,8 +10,11 @@ import ExpressRouter from '../routes/ExpressRouter';
 type MongoRouterParams<T> = {
   route: string,
   tableName: string,
-  zodSchema: ZodSchema<T>,
-  mongooseSchema: MongooseSchema<T>,
+  schemas: {
+    add: ZodSchema,
+    edit: ZodSchema,
+    mongo: MongooseSchema<T>,
+  }
 };
 
 type MongoFactoryReturn<T> = {
@@ -23,11 +26,11 @@ type MongoFactoryReturn<T> = {
 };
 
 export default function makeMongoRouter<T>(
-  { route, tableName, zodSchema, mongooseSchema }: MongoRouterParams<T>,
+  { route, tableName, schemas: { add, edit, mongo } }: MongoRouterParams<T>,
 ): MongoFactoryReturn<T> {
-  const model = new MongoModel<T>(tableName, mongooseSchema);
+  const model = new MongoModel<T>(tableName, mongo);
   const service = new Service<T>(model);
-  const controller = new Controller<T>(service, zodSchema);
+  const controller = new Controller<T>(service, { add, edit });
   const expressRouter = new ExpressRouter<T>(route, controller);
 
   return {
