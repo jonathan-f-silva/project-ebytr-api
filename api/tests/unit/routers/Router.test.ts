@@ -4,7 +4,7 @@ import { expect, use, request } from 'chai';
 import chaiHttp from 'chai-http';
 import sinon from 'sinon';
 import app, { layers } from '../../../src/app';
-import { validID, validTodo } from '../../mocks/TodoMocks';
+import { validAddTodo, validEditTodo, validID, validTodo } from '../../mocks/TodoMocks';
 
 const { model } = layers;
 
@@ -39,7 +39,7 @@ describe('Router', () => {
 
       const result = await request(app)
         .post('/todos')
-        .send(validTodo);
+        .send(validAddTodo);
 
       expect(result).to.have.status(201);
       expect(result.body).to.be.deep.equal(validTodo);
@@ -103,7 +103,7 @@ describe('Router', () => {
 
       const result = await request(app)
         .put(`/todos/${validID}`)
-        .send(validTodo);
+        .send(validEditTodo);
 
       expect(result).to.have.status(500);
     });
@@ -113,7 +113,7 @@ describe('Router', () => {
 
       const result = await request(app)
         .put('/todos/99999')
-        .send(validTodo);
+        .send(validEditTodo);
 
       expect(result).to.have.status(400);
     });
@@ -123,7 +123,7 @@ describe('Router', () => {
 
       const result = await request(app)
         .put(`/todos/${validID}`)
-        .send({});
+        .send({ description: 1111 });
 
       expect(result).to.have.status(400);
     });
@@ -133,7 +133,7 @@ describe('Router', () => {
 
       const result = await request(app)
         .put(`/todos/${validID}`)
-        .send(validTodo);
+        .send(validEditTodo);
 
       expect(result).to.have.status(200);
       expect(result.body).to.be.deep.equal(validTodo);
