@@ -4,14 +4,14 @@ import {
 import MongoModel from '../app/models/MongoModel';
 import TodoService from '../app/services/TodoService';
 import Controller from '../app/controllers/Controller';
-import ExpressRouter from '../routes/ExpressRouter';
+import TodosRouter from '../routes/TodosRouter';
 
 function makeTodoRouter() {
   const todoValidators = { add: AddTodoZodSchema, edit: EditTodoZodSchema };
   const model = new MongoModel<Todo>('Todos', TodoMongoSchema);
   const service = new TodoService(model);
   const controller = new Controller<Todo>(service, todoValidators);
-  const expressRouter = new ExpressRouter<Todo>('/todos', controller);
+  const expressRouter = new TodosRouter('/todos', controller);
   
   return {
     model,

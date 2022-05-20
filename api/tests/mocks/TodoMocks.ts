@@ -21,3 +21,7 @@ export const validEditTodo: Edit<Todo> = {
   description: 'Fazer testes E2E',
   status: 'Concluído! 🎉',
 };
+
+export const validTodoStatusUpdate: Edit<Todo> = {
+  status: 'Em andamento',
+};
