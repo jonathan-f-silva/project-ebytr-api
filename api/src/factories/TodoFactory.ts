@@ -1,18 +1,25 @@
-import {
-  AddTodoZodSchema, EditTodoZodSchema, TodoMongoSchema, TodoSchema,
+import { 
+  AddTodoZodSchema, EditTodoZodSchema, Todo, TodoMongoSchema,
 } from '../app/interfaces/TodoSchema';
-import makeMongoRouter from './RouterFactory';
+import MongoModel from '../app/models/MongoModel';
+import TodoService from '../app/services/TodoService';
+import Controller from '../app/controllers/Controller';
+import ExpressRouter from '../routes/ExpressRouter';
 
 function makeTodoRouter() {
-  return makeMongoRouter<TodoSchema>({
-    route: '/todos',
-    tableName: 'Todos',
-    schemas: {
-      add: AddTodoZodSchema,
-      edit: EditTodoZodSchema,
-      mongo: TodoMongoSchema,
-    },
-  });
+  const todoValidators = { add: AddTodoZodSchema, edit: EditTodoZodSchema };
+  const model = new MongoModel<Todo>('Todos', TodoMongoSchema);
+  const service = new TodoService(model);
+  const controller = new Controller<Todo>(service, todoValidators);
+  const expressRouter = new ExpressRouter<Todo>('/todos', controller);
+  
+  return {
+    model,
+    service,
+    controller,
+    expressRouter,
+    router: expressRouter.router,
+  };
 }
 
 export default makeTodoRouter;
