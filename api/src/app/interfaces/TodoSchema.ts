@@ -1,5 +1,7 @@
 import { z } from 'zod';
 
+const statusTypes: readonly[string, string, string] = ['A fazer', 'Em andamento', 'Concluído! 🎉'];
+
 export const TodoMongoSchema = {
   id: String,
   description: String,
@@ -10,19 +12,18 @@ export const TodoMongoSchema = {
 export const TodoZodSchema = z.object({
   id: z.string(),
   description: z.string(),
-  status: z.enum(['A fazer', 'Em andamento', 'Concluído! 🎉']),
+  status: z.enum(statusTypes),
   createdAt: z.string(),
 });
 
 export const AddTodoZodSchema = z.object({
   description: z.string(),
+  status: z.enum(statusTypes),
 });
 
 export const EditTodoZodSchema = z.object({
   description: z.string().optional(),
-  status: z.enum(['A fazer', 'Em andamento', 'Concluído! 🎉']).optional(),
+  status: z.enum(statusTypes).optional(),
 });
 
-export type TodoSchema = z.infer<typeof TodoZodSchema>;
-export type AddTodoSchema = z.infer<typeof AddTodoZodSchema>;
-export type EditTodoSchema = z.infer<typeof EditTodoZodSchema>;
+export type Todo = z.infer<typeof TodoZodSchema>;

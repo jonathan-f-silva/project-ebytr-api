@@ -9,7 +9,8 @@ import {
   SchemaDefinition,
   SchemaDefinitionType,
 } from 'mongoose';
-import { Model } from '../interfaces/ModelInterface';
+import { Add, Edit } from '../interfaces';
+import { Model } from '../interfaces/Model';
 
 export default class MongoModel<T> implements Model<T> {
   constructor(
@@ -19,14 +20,14 @@ export default class MongoModel<T> implements Model<T> {
     public dao = createModel<T>(collection, schema),
   ) { }
 
-  create = async (obj: T): Promise<T> => this.dao.create(obj);
+  create = async (obj: Add<T>): Promise<T> => this.dao.create(obj);
 
   read = async (): Promise<T[]> => this.dao.find();
 
   readOne = async (id: string): Promise<T | null> =>
     this.dao.findOne({ _id: id });
 
-  update = async (id: string, obj: T): Promise<T | null> =>
+  update = async (id: string, obj: Edit<T>): Promise<T | null> =>
     this.dao.findByIdAndUpdate(id, obj, { new: true });
 
   delete = async (id: string): Promise<T | null> =>

@@ -1,8 +1,8 @@
 import { ZodSchema } from 'zod';
-import IdSchema from '../interfaces/IdSchema';
-import Service from '../services/Service';
+import { IdSchema } from '../interfaces';
 import ErrorMessage from '../../utils/ErrorMessage';
 import ValidationError from '../../utils/ValidationError';
+import Service from '../services/Service';
 
 export default class Controller<T> {
   constructor(
@@ -27,9 +27,9 @@ export default class Controller<T> {
   update = async (id: string, data: T): Promise<T | null> => {
     const { success: idOkay } = IdSchema.safeParse(id);
     if (!idOkay) throw new ValidationError(ErrorMessage.ID_ERROR);
-    const { success } = this.validators.edit.safeParse(data);
-    if (!success) throw new ValidationError();
-    return this.service.update(id, data);
+    const result = this.validators.edit.safeParse(data);
+    if (!result.success) throw new ValidationError();
+    return this.service.update(id, result.data);
   };
 
   delete = async (id: string): Promise<T | null> => {

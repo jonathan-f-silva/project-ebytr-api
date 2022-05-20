@@ -1,12 +1,13 @@
-import { Model } from '../interfaces/ModelInterface';
+import { Model } from '../interfaces/Model';
 import NotFoundError from '../../utils/NotFoundError';
+import { Add, Edit } from '../interfaces';
 
 export default class Service<T> {
   constructor(
     protected model: Model<T>,
   ) { }
 
-  create = async (data: T): Promise<T> => this.model.create(data);
+  create = async (data: Add<T>): Promise<T> => this.model.create(data); 
 
   read = async (): Promise<T[]> => this.model.read();
 
@@ -16,7 +17,7 @@ export default class Service<T> {
     return found;
   };
 
-  update = async (id: string, data: T): Promise<T> => {
+  update = async (id: string, data: Edit<T>): Promise<T> => {
     const updated = await this.model.update(id, data);
     if (updated === null) throw new NotFoundError();
     return updated;
