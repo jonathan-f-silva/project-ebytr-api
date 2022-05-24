@@ -20,6 +20,7 @@
     "zod": "^3.16.0"
   },
   "devDependencies": {
+    "@istanbuljs/nyc-config-typescript": "^1.0.2",
     "@types/chai": "^4.3.1",
     "@types/chai-as-promised": "^7.1.5",
     "@types/chai-http": "^4.2.0",
