@@ -1,0 +1,19 @@
+{
+  "$schema": "./node_modules/@stryker-mutator/core/schema/stryker-schema.json",
+  "_comment": "This config was generated using 'stryker init'. Please take a look at: https://stryker-mutator.io/docs/stryker-js/configuration/ for more information",
+  "packageManager": "yarn",
+  "reporters": [
+    "html",
+    "clear-text",
+    "progress"
+  ],
+  "checkers": ["typescript"],
+  "disableTypeChecks": "{test,tests,src,lib}/**/*.{js,ts,jsx,tsx,html,vue}",
+  "tsconfigFile": "tsconfig.json",
+  "testRunner": "mocha",
+  "mochaOptions": {
+    "spec": [ "tests/**/*.test.ts" ],
+    "require": [ "ts-node/register" ]
+  },
+  "coverageAnalysis": "perTest"
+}
