@@ -7,13 +7,20 @@
     "clear-text",
     "progress"
   ],
-  "checkers": ["typescript"],
+  "checkers": [
+    "typescript"
+  ],
   "disableTypeChecks": "{test,tests,src,lib}/**/*.{js,ts,jsx,tsx,html,vue}",
   "tsconfigFile": "tsconfig.json",
   "testRunner": "mocha",
   "mochaOptions": {
-    "spec": [ "tests/**/*.test.ts" ],
-    "require": [ "ts-node/register" ]
+    "spec": [
+      "tests/**/*.test.ts"
+    ],
+    "require": [
+      "ts-node/register"
+    ]
   },
-  "coverageAnalysis": "perTest"
+  "coverageAnalysis": "perTest",
+  "ignoreStatic": true
 }
