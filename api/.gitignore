@@ -12,6 +12,7 @@ dist
 dist-ssr
 *.local
 .nyc_output
+coverage
 
 # Editor directories and files
 .vscode/*
@@ -23,3 +24,7 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# stryker temp files
+.stryker-tmp
+reports
