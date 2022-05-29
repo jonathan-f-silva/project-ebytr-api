@@ -3,8 +3,12 @@
 import { expect, use, request } from 'chai';
 import chaiHttp from 'chai-http';
 import sinon from 'sinon';
+
+import { 
+  validAddTodo, validEditTodo, validID, validTodo, validTodoStatusUpdate,
+} from '../../mocks/TodoMocks';
+
 import app, { layers } from '../../../src/app';
-import { validAddTodo, validEditTodo, validID, validTodo } from '../../mocks/TodoMocks';
 
 const { model } = layers;
 
@@ -134,6 +138,49 @@ describe('Router', () => {
       const result = await request(app)
         .put(`/todos/${validID}`)
         .send(validEditTodo);
+
+      expect(result).to.have.status(200);
+      expect(result.body).to.be.deep.equal(validTodo);
+    });
+  });
+
+  describe('PATCH /todos/:id (#updateStatus)', () => {
+    it('retorna erro 500 caso DB gere erro', async () => {
+      sinon.stub(model.dao, 'findByIdAndUpdate').rejects();
+
+      const result = await request(app)
+        .patch(`/todos/${validID}/status`)
+        .send(validTodoStatusUpdate);
+
+      expect(result).to.have.status(500);
+    });
+
+    it('retorna erro 400 caso receba id inválido', async () => {
+      sinon.stub(model.dao, 'findByIdAndUpdate').rejects();
+
+      const result = await request(app)
+        .patch('/todos/99999/status')
+        .send(validTodoStatusUpdate);
+
+      expect(result).to.have.status(400);
+    });
+
+    it('retorna erro 400 caso receba status inválido', async () => {
+      sinon.stub(model.dao, 'findByIdAndUpdate').rejects();
+
+      const result = await request(app)
+        .patch(`/todos/${validID}/status`)
+        .send({ status: 'oi' });
+
+      expect(result).to.have.status(400);
+    });
+
+    it('retorna status 200 caso tenha sucesso', async () => {
+      sinon.stub(model.dao, 'findByIdAndUpdate').resolves(validTodo as any);
+
+      const result = await request(app)
+        .patch(`/todos/${validID}/status`)
+        .send(validTodoStatusUpdate);
 
       expect(result).to.have.status(200);
       expect(result.body).to.be.deep.equal(validTodo);
