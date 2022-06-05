@@ -3,7 +3,7 @@ import { expect, use, should } from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import sinon from 'sinon';
 
-import { layers } from '../../../src/app';
+import { layers } from '../../../app';
 
 use(chaiAsPromised);
 should();

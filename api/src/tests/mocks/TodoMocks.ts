@@ -1,7 +1,7 @@
-import { Add, Edit } from '../../src/app/interfaces';
+import { Add, Edit } from '../../app/interfaces';
 import {
   Todo,
-} from '../../src/app/interfaces/TodoSchema';
+} from '../../app/interfaces/TodoSchema';
 
 export const validID = '62620d6c9162997790a96412';
 

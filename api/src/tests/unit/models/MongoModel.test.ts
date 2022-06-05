@@ -4,7 +4,7 @@ import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
 import chaiAsPromised from 'chai-as-promised';
 
-import { layers } from '../../../src/app';
+import { layers } from '../../../app';
 
 const { model } = layers;
 

@@ -1,7 +1,7 @@
 /* eslint-disable sonarjs/no-duplicate-string */
 import { expect } from 'chai';
 import sinon from 'sinon';
-import { layers } from '../../../src/app';
+import { layers } from '../../../app';
 import { validTodo, validID } from '../../mocks/TodoMocks';
 
 const { service, controller } = layers;

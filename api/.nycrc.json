@@ -7,7 +7,7 @@
   ],
   "exclude": [
     "dist",
-    "tests/**/*.*"
+    "src/tests/**/*.*"
   ],
   "reporter": [
     "html",

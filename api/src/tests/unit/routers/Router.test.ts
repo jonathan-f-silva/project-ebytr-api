@@ -8,7 +8,7 @@ import {
   validAddTodo, validEditTodo, validID, validTodo, validTodoStatusUpdate,
 } from '../../mocks/TodoMocks';
 
-import app, { layers } from '../../../src/app';
+import app, { layers } from '../../../app';
 
 const { model } = layers;
 
