@@ -15,11 +15,11 @@ app.use(router);
 
 app.use(ErrorMiddleware);
 
-app.use('/coffee', (_req, res) => {
+app.get('/coffee', (_req, res) => {
   res.sendStatus(418);
 });
 
-app.use('/', (_req, res) => {
+app.get('/', (_req, res) => {
   res.sendStatus(200);
 });
 
