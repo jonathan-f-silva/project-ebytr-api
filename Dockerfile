@@ -8,8 +8,8 @@ RUN npm install && rm -rf /usr/local/share/.cache/*
 COPY . .
 CMD npm run dev
 
-FROM base AS builder
+FROM base AS production
 # install all deps, build, then remove dev deps and cache
 COPY . .
-RUN npm install && npm run build && npm prune --production && rm -rf /usr/local/share/.cache/*
+RUN npm install && npm run build && npm prune --omit=dev && rm -rf /usr/local/share/.cache/*
 CMD npm start
