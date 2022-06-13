@@ -1,0 +1,31 @@
+services:
+  api:
+    build: 
+      context: .
+      target: development
+    ports:
+      - 3001:3001
+    command: yarn dev
+    volumes:
+      - ./src:/app/src
+    environment:
+      - DB_HOST=db
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "lsof", "-t", "-i:3001"]
+      interval: 3s
+      timeout: 10s
+      retries: 5
+
+  db:
+    image: mongo
+    ports:
+      - 27017
+    restart: always
+    healthcheck:
+      test: ["CMD", "pgrep", "mongod"]
+      interval: 3s
+      timeout: 10s
+      retries: 5
