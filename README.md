@@ -1,4 +1,4 @@
-# Ebytr ToDO API
+# Ebytr ToDo API
 
 Parte do backend do app Ebytr (API), com um CRUD de tarefas feito em TS Node Express.
 
