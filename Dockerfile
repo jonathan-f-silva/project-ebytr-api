@@ -4,12 +4,12 @@ WORKDIR /app
 COPY package*.json ./
 
 FROM base AS development
-RUN npm install && rm -rf /usr/local/share/.cache/*
+RUN npm install && rm -rf /usr/local/share/.cache/* /root/.npm
 COPY . .
 CMD npm run dev
 
 FROM base AS production
 # install all deps, build, then remove dev deps and cache
 COPY . .
-RUN npm install && npm run build && npm prune --omit=dev && rm -rf /usr/local/share/.cache/*
+RUN npm install && npm run build && npm prune --omit=dev && rm -rf /usr/local/share/.cache/* /root/.npm
 CMD npm start
