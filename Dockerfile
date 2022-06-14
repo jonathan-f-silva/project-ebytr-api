@@ -1,19 +1,22 @@
-FROM node:16-alpine AS base
-EXPOSE 3001
+# Common build stage
+FROM node:16-alpine3.14 as common-build-stage
+
+COPY . ./app
+
 WORKDIR /app
-COPY package*.json ./
 
-FROM base AS development
-RUN npm install && rm -rf /usr/local/share/.cache/* /root/.npm
-COPY . .
+RUN npm install
+
+RUN npm run build
+
+EXPOSE 3000
+
+FROM common-build-stage as production-build-stage
+
+ENV NODE_ENV production
+ENV PORT 3001
+
 RUN chown -R 1000:1000 /app
 USER 1000
-CMD npm run dev
 
-FROM base AS production
-# install all deps, build, then remove dev deps and cache
-COPY . .
-RUN npm install && npm run build && npm prune --omit=dev && rm -rf /usr/local/share/.cache/* /root/.npm
-RUN chown -R 1000:1000 /app
-USER 1000
-CMD npm start
+CMD node /app/dist/index.js
