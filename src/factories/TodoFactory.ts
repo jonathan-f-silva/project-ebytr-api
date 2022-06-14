@@ -11,7 +11,7 @@ function makeTodoRouter() {
   const model = new MongoModel<Todo>('Todos', TodoMongoSchema);
   const service = new TodoService(model);
   const controller = new Controller<Todo>(service, todoValidators);
-  const expressRouter = new TodosRouter('/todos', controller);
+  const expressRouter = new TodosRouter('/api/todos', controller);
   
   return {
     model,
