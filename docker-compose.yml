@@ -5,7 +5,6 @@ services:
       target: development
     ports:
       - 3001:3001
-    command: yarn dev
     volumes:
       - ./src:/app/src
     environment:
