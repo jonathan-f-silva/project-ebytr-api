@@ -17,6 +17,8 @@ services:
       interval: 3s
       timeout: 10s
       retries: 5
+    networks:
+      - ebytr-dev
 
   db:
     image: mongo:5
@@ -28,3 +30,9 @@ services:
       interval: 3s
       timeout: 10s
       retries: 5
+    networks:
+      - ebytr-dev
+
+networks:
+  ebytr-dev:
+    name: ebytr-dev
