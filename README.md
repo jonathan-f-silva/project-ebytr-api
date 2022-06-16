@@ -17,3 +17,12 @@ docker compose up -d
 ```
 
 - Agora é possível fazer alterações em tempo real na pasta `src` e acessar a API em http://localhost:3001
+
+
+## Variáveis de ambiente
+
+- `MONGO_DB_URL` - URL da DB do mongo
+
+```sh
+MONGO_DB_URL=mongodb://localhost:27017/Ebytr
+```
