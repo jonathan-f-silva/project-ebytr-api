@@ -12,6 +12,8 @@ import app, { layers } from '../../../app';
 
 const { model } = layers;
 
+const ENDPOINT = '/api/todos';
+
 use(chaiHttp);
 
 describe('Router', () => {
@@ -22,7 +24,7 @@ describe('Router', () => {
       sinon.stub(model.dao, 'create').rejects();
 
       const result = await request(app)
-        .post('/todos')
+        .post(ENDPOINT)
         .send(validTodo);
 
       expect(result).to.have.status(500);
@@ -32,7 +34,7 @@ describe('Router', () => {
       sinon.stub(model.dao, 'create').rejects();
 
       const result = await request(app)
-        .post('/todos')
+        .post(ENDPOINT)
         .send({});
 
       expect(result).to.have.status(400);
@@ -42,7 +44,7 @@ describe('Router', () => {
       sinon.stub(model.dao, 'create').resolves(validTodo);
 
       const result = await request(app)
-        .post('/todos')
+        .post(ENDPOINT)
         .send(validAddTodo);
 
       expect(result).to.have.status(201);
@@ -55,7 +57,7 @@ describe('Router', () => {
       sinon.stub(model.dao, 'find').rejects();
 
       const result = await request(app)
-        .get('/todos');
+        .get(ENDPOINT);
 
       expect(result).to.have.status(500);
     });
@@ -64,7 +66,7 @@ describe('Router', () => {
       sinon.stub(model.dao, 'find').resolves([]);
 
       const result = await request(app)
-        .get('/todos');
+        .get(ENDPOINT);
 
       expect(result).to.have.status(200);
       expect(result.body).to.be.deep.equal([]);
@@ -76,7 +78,7 @@ describe('Router', () => {
       sinon.stub(model.dao, 'findOne').rejects();
 
       const result = await request(app)
-        .get(`/todos/${validID}`);
+        .get(`${ENDPOINT}/${validID}`);
 
       expect(result).to.have.status(500);
     });
@@ -85,7 +87,7 @@ describe('Router', () => {
       sinon.stub(model.dao, 'findOne').rejects();
 
       const result = await request(app)
-        .get('/todos/99999');
+        .get(`${ENDPOINT}/99999`);
 
       expect(result).to.have.status(400);
     });
@@ -94,7 +96,7 @@ describe('Router', () => {
       sinon.stub(model.dao, 'findOne').resolves(validTodo as any);
 
       const result = await request(app)
-        .get(`/todos/${validID}`);
+        .get(`${ENDPOINT}/${validID}`);
 
       expect(result).to.have.status(200);
       expect(result.body).to.be.deep.equal(validTodo);
@@ -106,7 +108,7 @@ describe('Router', () => {
       sinon.stub(model.dao, 'findByIdAndUpdate').rejects();
 
       const result = await request(app)
-        .put(`/todos/${validID}`)
+        .put(`${ENDPOINT}/${validID}`)
         .send(validEditTodo);
 
       expect(result).to.have.status(500);
@@ -116,7 +118,7 @@ describe('Router', () => {
       sinon.stub(model.dao, 'findByIdAndUpdate').rejects();
 
       const result = await request(app)
-        .put('/todos/99999')
+        .put(`${ENDPOINT}/99999`)
         .send(validEditTodo);
 
       expect(result).to.have.status(400);
@@ -126,7 +128,7 @@ describe('Router', () => {
       sinon.stub(model.dao, 'findByIdAndUpdate').rejects();
 
       const result = await request(app)
-        .put(`/todos/${validID}`)
+        .put(`${ENDPOINT}/${validID}`)
         .send({ description: 1111 });
 
       expect(result).to.have.status(400);
@@ -136,7 +138,7 @@ describe('Router', () => {
       sinon.stub(model.dao, 'findByIdAndUpdate').resolves(validTodo as any);
 
       const result = await request(app)
-        .put(`/todos/${validID}`)
+        .put(`${ENDPOINT}/${validID}`)
         .send(validEditTodo);
 
       expect(result).to.have.status(200);
@@ -149,7 +151,7 @@ describe('Router', () => {
       sinon.stub(model.dao, 'findByIdAndUpdate').rejects();
 
       const result = await request(app)
-        .patch(`/todos/${validID}/status`)
+        .patch(`${ENDPOINT}/${validID}/status`)
         .send(validTodoStatusUpdate);
 
       expect(result).to.have.status(500);
@@ -159,7 +161,7 @@ describe('Router', () => {
       sinon.stub(model.dao, 'findByIdAndUpdate').rejects();
 
       const result = await request(app)
-        .patch('/todos/99999/status')
+        .patch(`${ENDPOINT}/99999/status`)
         .send(validTodoStatusUpdate);
 
       expect(result).to.have.status(400);
@@ -169,7 +171,7 @@ describe('Router', () => {
       sinon.stub(model.dao, 'findByIdAndUpdate').rejects();
 
       const result = await request(app)
-        .patch(`/todos/${validID}/status`)
+        .patch(`${ENDPOINT}/${validID}/status`)
         .send({ status: 'oi' });
 
       expect(result).to.have.status(400);
@@ -179,7 +181,7 @@ describe('Router', () => {
       sinon.stub(model.dao, 'findByIdAndUpdate').resolves(validTodo as any);
 
       const result = await request(app)
-        .patch(`/todos/${validID}/status`)
+        .patch(`${ENDPOINT}/${validID}/status`)
         .send(validTodoStatusUpdate);
 
       expect(result).to.have.status(200);
@@ -192,7 +194,7 @@ describe('Router', () => {
       sinon.stub(model.dao, 'findByIdAndDelete').rejects();
 
       const result = await request(app)
-        .delete(`/todos/${validID}`);
+        .delete(`${ENDPOINT}/${validID}`);
 
       expect(result).to.have.status(500);
     });
@@ -201,7 +203,7 @@ describe('Router', () => {
       sinon.stub(model.dao, 'findByIdAndDelete').rejects();
 
       const result = await request(app)
-        .delete('/todos/99999');
+        .delete(`${ENDPOINT}/99999`);
 
       expect(result).to.have.status(400);
     });
@@ -210,7 +212,7 @@ describe('Router', () => {
       sinon.stub(model.dao, 'findByIdAndDelete').resolves(validTodo as any);
 
       const result = await request(app)
-        .delete(`/todos/${validID}`);
+        .delete(`${ENDPOINT}/${validID}`);
 
       expect(result).to.have.status(204);
     });
